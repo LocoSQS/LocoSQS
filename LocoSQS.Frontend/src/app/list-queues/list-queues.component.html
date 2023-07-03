@@ -1,0 +1,43 @@
+<mat-card class="margin">
+    <mat-card-header class="width-100">
+        <mat-card-title>Available queues</mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+        <button mat-button aria-label="Add a queue" (click)="openQueueModal()">
+            <mat-icon>post_add</mat-icon>
+            Create queue
+        </button>
+        <button mat-button aria-label="Add a queue" (click)="reloadQueues()">
+            <mat-icon>update</mat-icon>
+            Reload queues
+        </button>
+    </mat-card-actions>
+    <mat-list class="mat-list">
+        <mat-accordion>
+            <mat-expansion-panel *ngFor="let queue of (data | async)" (opened)="selected(queue)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>{{ queue.name }}</mat-panel-title>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
+                    <div>
+                        <button mat-button aria-label="Delete Queue" (click)="openDeleteModal()">
+                            <mat-icon color="warn">delete</mat-icon>
+                            Delete Queue
+                        </button>
+    
+                        <button mat-button aria-label="Purge Queue" (click)="openPurgeModal()">
+                            <mat-icon class="color-brown">archive</mat-icon>
+                            Purge Queue
+                        </button>
+                    </div>
+                    <mat-divider class="margin"></mat-divider>
+                    <loco-queue-attributes></loco-queue-attributes>
+                    <mat-divider class="margin"></mat-divider>
+                    <loco-message-sender></loco-message-sender>
+                    <mat-divider class="margin"></mat-divider>
+                    <loco-queue-tracker></loco-queue-tracker>
+                </ng-template>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-list>
+</mat-card>

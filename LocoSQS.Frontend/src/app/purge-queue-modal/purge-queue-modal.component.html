@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Purge Queue</h1>
+<div mat-dialog-content>
+    Would you like to purge queue "{{(selectedQueue | async)?.name}}"? <br>
+    This will delete all messages on the queue
+</div>
+<div mat-dialog-actions>
+    <button color="accent" mat-button mat-dialog-close cdkFocusInitial (click)="purge()">Purge</button>
+    <button mat-button mat-dialog-close>Cancel</button>
+</div>

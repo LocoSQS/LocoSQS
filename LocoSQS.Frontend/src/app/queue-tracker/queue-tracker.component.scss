@@ -1,0 +1,31 @@
+.example-action-buttons {
+    padding-bottom: 20px;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.example-headers-align .mat-mdc-form-field+.mat-mdc-form-field {
+    margin-left: 8px;
+}
+
+.top-right {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+}
+
+.margin {
+    margin: 10px;
+}
+
+.margin-fish {
+    margin-left: 10px;
+    margin-bottom: 3px;
+}
+
+.border-grey {
+    border: lightgrey 1px solid;
+}

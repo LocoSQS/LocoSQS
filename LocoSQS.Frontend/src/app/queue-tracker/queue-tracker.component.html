@@ -1,0 +1,43 @@
+<mat-card class="border-grey">
+    <mat-card-header>
+        <mat-card-title>Queue Tracker</mat-card-title>
+    </mat-card-header>
+
+    <mat-chip-listbox aria-label="Fish selection" multiple="" class="margin-fish">
+        <mat-chip-option (selectionChange)="onQueueVisible = $event.selected" selected>On Queue</mat-chip-option>
+        <mat-chip-option (selectionChange)="inFlightVisible = $event.selected" selected>In Flight</mat-chip-option>
+        <mat-chip-option (selectionChange)="deletedVisible = $event.selected" selected>Deleted</mat-chip-option>
+    </mat-chip-listbox>
+
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let item of filterMessages((data | async)!).reverse()" class="example-headers-align">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{item.body | truncate:50 }}
+                </mat-panel-title>
+                <mat-panel-description>
+                    Read {{ item.receiveCount }} time(s). {{ item.history[item.history.length - 1] |
+                    readableHistory }}
+                    <mat-icon>{{ item.history[item.history.length - 1] | iconHistory }}</mat-icon>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <p><b>Id:</b> {{ item.id }}</p>
+                <p *ngIf="item.firstReceived !== undefined"><b>Time first received:</b> {{ item.firstReceived | date:'d/M/yy HH:mm:ss' }}</p>
+                <p><b>Time sent:</b> {{ item.sentTimestamp | date:'d/M/yy HH:mm:ss' }}</p>
+                <b>Visibility history:</b>
+                <ul>
+                    <li *ngFor="let history of item.history.slice().reverse()">{{ history | readableHistory }} at {{ history.at | date:'HH:mm:ss' }}</li>
+                </ul>
+                <b>Body:</b>
+                <pre>{{ item.body }}</pre>
+                <div class="top-right">
+                    <button *ngIf="item.history[item.history.length - 1].event !== 'OnMessageDeleted'" mat-button aria-label="Delete message" (click)="deleteMessage(item)">
+                        <mat-icon>delete_forever</mat-icon>
+                        Delete
+                    </button>
+                </div>
+            </ng-template>
+        </mat-expansion-panel>
+    </mat-accordion>
+</mat-card>

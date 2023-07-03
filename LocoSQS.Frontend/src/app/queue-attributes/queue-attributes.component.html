@@ -1,0 +1,129 @@
+<mat-card class="border-grey">
+    <mat-card-header>
+        <mat-card-title>Settings</mat-card-title>
+    </mat-card-header>
+
+<div class="flex" *ngIf="attributes !== null">
+    <mat-form-field appearance="fill">
+        <mat-label>Delay Message (in s)</mat-label>
+        <input type="number" placeholder="Seconds" aria-label="Delay Seconds" matInput [matAutocomplete]="dm" min="0"
+            max="900" [ngModelOptions]="{ standalone: true }" [(ngModel)]="attributes.delaySeconds">
+        <mat-autocomplete #dm="matAutocomplete">
+            <mat-option value="0">
+                No Delay
+            </mat-option>
+            <mat-option value="5">
+                5 Seconds
+            </mat-option>
+            <mat-option value="60">
+                1 minute
+            </mat-option>
+            <mat-option value="300">
+                5 minutes
+            </mat-option>
+            <mat-option value="900">
+                15 minutes
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Maxiumum Message Size (in bytes)</mat-label>
+        <input type="number" placeholder="Bytes" aria-label="MaxiumMessageSize" matInput [matAutocomplete]="mms"
+            min="1024" max="262144" [ngModelOptions]="{ standalone: true }" [(ngModel)]="attributes.maximumMessageSize">
+        <mat-autocomplete #mms="matAutocomplete">
+            <mat-option value="1024">
+                1 KB
+            </mat-option>
+            <mat-option value="262144">
+                256 KB
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Message Retention Period (in s)</mat-label>
+        <input type="number" placeholder="Seconds" aria-label="MessageRetentionPeriod" matInput [matAutocomplete]="mrp"
+            min="60" max="1209600" [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="attributes.messageRetentionPeriod">
+        <mat-autocomplete #mrp="matAutocomplete">
+            <mat-option value="345600">
+                4 Days
+            </mat-option>
+            <mat-option value="1209600">
+                14 Days
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Recieve Message Response Delay (in s)</mat-label>
+        <input type="number" placeholder="Seconds" aria-label="ReceiveMessageWaitTimeSeconds" matInput
+            [matAutocomplete]="rmwts" min="0" max="20" [ngModelOptions]="{ standalone: true }"
+            [(ngModel)]="attributes.receiveMessageWaitTimeSeconds">
+        <mat-autocomplete #rmwts="matAutocomplete">
+            <mat-option value="0">
+                Off (Respond instantly)
+            </mat-option>
+            <mat-option value="1">
+                Wait for at most 1 second
+            </mat-option>
+            <mat-option value="20">
+                Wait for at most 20 seconds
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Message Visibility Timeout (in s)</mat-label>
+        <input type="number" placeholder="Seconds" aria-label="Visibility Timeout" matInput [matAutocomplete]="vt"
+            min="0" max="43200" [ngModelOptions]="{ standalone: true }" [(ngModel)]="attributes.visibilityTimeout">
+        <mat-autocomplete #vt="matAutocomplete">
+            <mat-option value="0">
+                Off (Warn: Received messages can be read by other clients)
+            </mat-option>
+            <mat-option value="30">
+                Keep invisible for 30 seconds
+            </mat-option>
+            <mat-option value="60">
+                Keep invisible for 1 minute
+            </mat-option>
+            <mat-option value="3600">
+                Keep invisible for 1 hour
+            </mat-option>
+            <mat-option value="43200">
+                Keep invisible for 12 hours
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Dead Letter Queue ARN</mat-label>
+        <input type="text" placeholder="ARN" aria-label="DLQ" matInput [matAutocomplete]="dlq"
+            [ngModelOptions]="{ standalone: true }" [(ngModel)]="attributes.deadLetterTargetArn">
+        <mat-autocomplete #dlq="matAutocomplete">
+            <mat-option value="">
+                None
+            </mat-option>
+            <mat-option *ngFor="let queue of availableQueues" [value]="queue.arn">
+                {{queue.name}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill"
+        *ngIf="attributes.deadLetterTargetArn !== null && attributes.deadLetterTargetArn !== ''">
+        <mat-label>Maximum Receives before DLQ move</mat-label>
+        <input type="number" placeholder="ARN" aria-label="MaxReceiveCount" matInput [matAutocomplete]="mrc" min="0"
+            [ngModelOptions]="{ standalone: true }" [(ngModel)]="attributes.maxReceiveCount">
+        <mat-autocomplete #mrc="matAutocomplete">
+            <mat-option value="10">
+                10 Receives
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</div>
+<mat-card-actions align="end">
+    <button mat-button (click)="save()">Save</button>
+</mat-card-actions>
+</mat-card>

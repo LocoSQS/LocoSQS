@@ -1,0 +1,64 @@
+# Docker
+trigger:
+- master
+
+resources:
+- repo: self
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '7.x'
+        
+    - task: DotNetCoreCLI@2
+      displayName: Run unit tests
+      inputs:
+        command: 'test'
+        projects: "LocoSQS.Test/LocoSQS.Test.csproj"
+
+    - script: docker build . --tag locosqs:latest --no-cache
+      displayName: Build docker image
+
+    - script: docker run -p 8080:8080 --name locosqs -d locosqs:latest
+      displayName: Run docker image
+
+    # Install latest version of AWSSDK.SQS
+    - script: cd LocoSQS.E2E && dotnet add package AWSSDK.SQS
+      displayName: Install latest version of AWS SDK for testing API
+
+    - task: DotNetCoreCLI@2
+      displayName: Test latest version of AWSSDK.SQS against LocoSQS
+      inputs:
+        command: 'test'
+        projects: "LocoSQS.E2E/LocoSQS.E2E.csproj"
+      env:
+        SERVICEURL: http://localhost:8080
+        ACCESSKEY: x
+        SECRETKEY: x
+
+    # Install pinned version of AWSSDK.SQS for new API
+    - script: cd LocoSQS.E2E && dotnet add package AWSSDK.SQS --version 3.7.101
+      displayName: Install pinned version of AWS SDK for testing API
+
+    - task: DotNetCoreCLI@2
+      displayName: Test pinned version of AWSSDK.SQS against LocoSQS
+      inputs:
+        command: 'test'
+        projects: "LocoSQS.E2E/LocoSQS.E2E.csproj"
+      env:
+        SERVICEURL: http://localhost:8080
+        ACCESSKEY: x
+        SECRETKEY: x
+
+    - script: docker kill locosqs
+      displayName: Kill docker container
+      condition: always()

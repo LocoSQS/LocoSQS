@@ -1,0 +1,17 @@
+.flex {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.flex > mat-form-field {
+    flex-grow: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+    min-width: 200px;
+}
+
+.border-grey {
+    border: lightgrey 1px solid;
+}

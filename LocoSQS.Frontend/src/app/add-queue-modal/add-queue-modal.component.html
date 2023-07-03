@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Create queue</h2>
+<form [formGroup]="addQueueForm" class="margin">
+    <mat-form-field appearance="fill" class="full-width">
+        <mat-label for="queueName">Queue Name</mat-label>
+        <input cdkFocusInitial matInput id="queueName" formControlName="queueName" [errorStateMatcher]="matcher" />
+        <mat-error *ngIf="addQueueForm.controls.queueName.errors?.['uniqueQueueNameValidator'] && !addQueueForm.controls.queueName.errors?.['required']">
+            Queue already exists!
+        </mat-error>
+        <mat-error *ngIf="addQueueForm.controls.queueName.errors?.['required']">
+            Required
+        </mat-error>
+    </mat-form-field>
+    <div class="float-right">
+        <button color="primary" (click)="add()" [disabled]="!addQueueForm.valid" mat-button mat-dialog-close>Create</button>
+        <button mat-button mat-dialog-close>Cancel</button>
+    </div>
+</form>
